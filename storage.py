@@ -41,8 +41,23 @@ def save_complaint(complaint):
 
     initialize_files()
 
+    with open(COMPLAINTS_FILE, "r", newline="", encoding="utf-8-sig") as file:
+        reader = csv.DictReader(file)
+        fieldnames = list(reader.fieldnames or [])
+        rows = list(reader)
+
+    missing = [k for k in complaint.keys() if k not in fieldnames]
+    if missing:
+        fieldnames += missing
+        rows.append(complaint)
+        with open(COMPLAINTS_FILE, "w", newline="", encoding="utf-8-sig") as file:
+            writer = csv.DictWriter(file, fieldnames=fieldnames)
+            writer.writeheader()
+            writer.writerows(rows)
+        return
+
     with open(COMPLAINTS_FILE, "a", newline="", encoding="utf-8-sig") as file:
-        writer = csv.DictWriter(file, fieldnames=complaint.keys())
+        writer = csv.DictWriter(file, fieldnames=fieldnames)
         writer.writerow(complaint)
 
 
