@@ -13,6 +13,10 @@ st.set_page_config(
     layout="wide"
 )
 
+from admin_gate import require_admin
+require_admin()
+
+
 initialize_files()
 
 COMPLAINTS_FILE = Path("complaints.csv")
