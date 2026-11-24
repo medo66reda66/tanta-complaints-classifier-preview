@@ -36,7 +36,12 @@ class ComplaintAIAgent:
         excel_path: str = "Tanta_University_Complaints_Final_Styled.xlsx",
         sheet_name=0,
     ) -> tuple[list[str], list[str]]:
-        df = pd.read_excel(excel_path, sheet_name=sheet_name, header=1)
+        import os
+        csv_path = "complaints_training.csv"
+        if os.path.exists(csv_path):
+            df = pd.read_csv(csv_path)
+        else:
+            df = pd.read_excel(excel_path, sheet_name=sheet_name, header=1)
         df = df.dropna(subset=["Complaint", "Category"])
         texts = df["Complaint"].astype(str).tolist()
         labels = df["Category"].astype(str).str.strip().tolist()
