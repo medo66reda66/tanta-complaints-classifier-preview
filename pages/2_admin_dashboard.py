@@ -403,6 +403,10 @@ if filtered_complaints:
 
         table_data.append({
             "Complaint ID": c.get("complaint_id", ""),
+            "Student": c.get("student_name", ""),
+            "Student ID": c.get("student_id", ""),
+            "AI Category": c.get("ai_category", ""),
+            "Priority": c.get("priority", ""),
             "College": c.get("college", ""),
             "Category": c.get("complaint_type", ""),
             "Title": c.get("title", ""),
