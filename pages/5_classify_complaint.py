@@ -3,7 +3,7 @@ from agent_service import ComplaintService
 
 st.set_page_config(page_title="Complaint Classifier", page_icon="🗂️", layout="centered")
 st.title("🗂️ Complaint Classifier")
-st.caption("Trained on the complaints in Tanta_University_Complaints_Final_Styled.xlsx")
+st.caption("Trained on the Tanta University complaints file (220 complaints, 52 categories)")
 
 
 @st.cache_resource
