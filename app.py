@@ -113,6 +113,8 @@ with col2:
     st.markdown('<div class="main-title">Tanta University Complaints</div>', unsafe_allow_html=True)
     st.markdown('<div class="subtitle">Smart Complaint Management System</div>', unsafe_allow_html=True)
 
+st.info("🧪 Demo version: please do NOT enter real personal data. Submitted complaints are stored temporarily and are erased whenever the app restarts.")
+
 st.divider()
 
 tanta_faculties = [
