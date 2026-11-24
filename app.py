@@ -1,3 +1,4 @@
+
 import streamlit as st
 from pathlib import Path
 import uuid
@@ -87,6 +88,10 @@ div[data-testid="stTextArea"] {
 """, unsafe_allow_html=True)
 
 logo_path = Path("tanta_logo.png")
+_b64 = Path("tanta_logo_b64.txt")
+if not logo_path.exists() and _b64.exists():
+    import base64
+    logo_path.write_bytes(base64.b64decode(_b64.read_text().strip()))
 
 col1, col2 = st.columns([1, 4])
 
