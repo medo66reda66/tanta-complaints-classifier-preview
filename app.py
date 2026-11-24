@@ -4,6 +4,14 @@ from pathlib import Path
 import uuid
 from datetime import datetime
 from storage import initialize_files, save_complaint
+from agent_service import ComplaintService
+from priority_reasoning import prioritize
+
+
+@st.cache_resource
+def get_service():
+    return ComplaintService()
+
 
 initialize_files()
 st.set_page_config(
@@ -174,16 +182,28 @@ with st.form("complaint_form"):
         else:
             complaint_id = f"TC-{datetime.now().year}-{uuid.uuid4().hex[:6].upper()}"
 
+            full_text = f"{complaint_title} {complaint_details}".strip()
+            try:
+                ai_category, _ = get_service().classify(full_text)
+                result = prioritize(full_text, ai_category)
+                priority = result["priority"]
+                reasoning = " | ".join(result["reasons"])
+            except Exception as exc:
+                ai_category, priority, reasoning = "", "", f"Auto-analysis failed: {exc}"
+
             complaint = {
                 "complaint_id": complaint_id,
+                "student_name": student_name,
+                "student_id": student_id,
+                "student_email": email,
                 "college": college,
                 "complaint_type": complaint_type,
                 "title": complaint_title,
                 "details": complaint_details,
                 "status": "Pending",
-                "ai_category": "",
-                "priority": "",
-                "reasoning": "",
+                "ai_category": ai_category,
+                "priority": priority,
+                "reasoning": reasoning,
                 "created_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             }
 
@@ -191,5 +211,6 @@ with st.form("complaint_form"):
 
             st.success("Your complaint has been submitted successfully!")
             st.info(f"Your Complaint ID is: {complaint_id}")
+            st.caption(f"Classified as: {ai_category or 'N/A'} | Priority: {priority or 'N/A'}")
             st.info("Please save this number to track your complaint.").write("")
     
