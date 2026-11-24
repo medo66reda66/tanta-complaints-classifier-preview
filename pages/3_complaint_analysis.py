@@ -838,12 +838,13 @@ if result:
 
         st.markdown("#### Priority Level")
 
-        if result["priority"] == "High":
-            st.error("🔴 HIGH PRIORITY")
-
-        elif result["priority"] == "Medium":
+        _p = str(result["priority"])
+        if _p in ("High", "حرجة"):
+            st.error("🔴 CRITICAL PRIORITY (حرجة)" if _p == "حرجة" else "🔴 HIGH PRIORITY")
+        elif _p in ("عالية",):
+            st.error("🔴 HIGH PRIORITY (عالية)")
+        elif _p in ("Medium", "متوسطة"):
             st.warning("🟠 MEDIUM PRIORITY")
-
         else:
             st.success("🟢 LOW PRIORITY")
 
