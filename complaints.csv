@@ -1,0 +1,10 @@
+﻿complaint_id,college,complaint_type,title,details,status,ai_category,priority,reasoning,created_at,ai_sentiment,ai_keywords,ai_summary,ai_department,ai_recommendation,ai_analyzed_at
+TC-2026-8F69C6,Faculty of Computers and Information,Academic,عطل في النت,المعامل مفيهاش نت,Pending,General Complaint,Low,No clear urgent or serious indicators were detected.,2026-11-24 13:22:16,Neutral,"عطل, النت, المعامل, مفيهاش",المعامل مفيهاش نت,University Administration,Send the complaint to University Administration for review and determine the appropriate department.,2026-11-24 16:17:30
+TC-2026-F4B0C9,Faculty of Computers and Information,Academic,عطل في النت,المعامل مفيهاش نت,Pending,,,,2026-11-24 13:22:17,,,,,,
+TC-2026-7D76C9,Faculty of Computers and Information,Academic,النت,"المعامل مفيهاش نت
+",Pending,,,,2026-11-24 13:24:18,,,,,,
+TC-2026-174CE5,Faculty of Computers and Information,Academic,النت,"المعامل مفيهاش نت
+",Pending,,,,2026-11-24 13:24:20,,,,,,
+TC-2026-C6AD90,Faculty of Computers and Information,Academic,النت,juugtgio,Pending,,,,2026-11-24 15:00:50,,,,,,
+TC-2026-1F703E,Faculty of Computers and Information,Academic,النت,عطل في المعامل,Pending,,,,2026-11-24 18:16:53
+TC-2026-2976E2,Faculty of Computers and Information,Academic,النت,اعطال في النت,Pending,,,,2026-11-24 18:30:26
