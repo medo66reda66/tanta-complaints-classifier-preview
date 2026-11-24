@@ -441,6 +441,26 @@ def recommend_solution(category, priority):
 # 12. COMPLETE ANALYSIS
 # ==========================================
 
+@st.cache_resource
+def _get_service():
+    import sys
+    sys.path.insert(0, str(BASE_DIR))
+    from agent_service import ComplaintService
+    return ComplaintService()
+
+
+@st.cache_data
+def _department_map():
+    import pandas as pd
+    df = pd.read_csv(BASE_DIR / "complaints_training.csv")
+    return (
+        df.dropna(subset=["Category", "Responsible_Department"])
+        .groupby("Category")["Responsible_Department"]
+        .agg(lambda x: x.value_counts().index[0])
+        .to_dict()
+    )
+
+
 def analyze_complaint(complaint):
 
     title = complaint.get("title", "")
@@ -448,9 +468,22 @@ def analyze_complaint(complaint):
 
     full_text = title + " " + details
 
-    category = classify_complaint(full_text)
+    # Category: trained classifier (falls back to the old keyword rules)
+    try:
+        category, _score = _get_service().classify(full_text)
+    except Exception:
+        category = classify_complaint(full_text)
 
-    priority, priority_reason = detect_priority(full_text)
+    # Priority: team's reasoning engine (same one used at submission)
+    try:
+        import sys
+        sys.path.insert(0, str(BASE_DIR))
+        from priority_reasoning import prioritize
+        pr = prioritize(full_text, category)
+        priority = pr["priority"]
+        priority_reason = " | ".join(pr["reasons"])
+    except Exception:
+        priority, priority_reason = detect_priority(full_text)
 
     sentiment = analyze_sentiment(full_text)
 
@@ -458,11 +491,11 @@ def analyze_complaint(complaint):
 
     summary = summarize_complaint(details)
 
-    department = recommend_department(category)
+    department = _department_map().get(category) or recommend_department(category)
 
-    recommendation = recommend_solution(
-        category,
-        priority
+    recommendation = (
+        f"Refer the complaint to {department} to review the issue "
+        f"({category}). Priority: {priority}."
     )
 
     return {
@@ -671,6 +704,12 @@ with st.container(border=True):
 
         st.write("**Complaint ID**")
         st.write(selected_complaint.get("complaint_id", "N/A"))
+
+        st.write("**Student Name / University ID**")
+        st.write(
+            f"{selected_complaint.get('student_name') or 'N/A'} / "
+            f"{selected_complaint.get('student_id') or 'N/A'}"
+        )
 
         st.write("**College**")
         st.write(selected_complaint.get("college", "N/A"))
